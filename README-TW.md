@@ -19,22 +19,22 @@
  services:
    rustdesk:
      ports:
-       - 21114:21114
-       - 21115:21115
-       - 21116:21116
-       - 21116:21116/udp
-       - 21117:21117
-       - 21118:21118
-       - 21119:21119
+       - 31114:31114
+       - 31115:31115
+       - 31116:31116
+       - 31116:31116/udp
+       - 31117:31117
+       - 31118:31118
+       - 31119:31119
      image: lejianwen/rustdesk-server-s6:latest
      environment:
        - RELAY=<relay_server[:port]>
        - ENCRYPTED_ONLY=1
        - MUST_LOGIN=N
        - TZ=Asia/Shanghai
-       - RUSTDESK_API_RUSTDESK_ID_SERVER=<id_server[:21116]>
-       - RUSTDESK_API_RUSTDESK_RELAY_SERVER=<relay_server[:21117]>
-       - RUSTDESK_API_RUSTDESK_API_SERVER=http://<api_server[:21114]>
+       - RUSTDESK_API_RUSTDESK_ID_SERVER=<id_server[:31116]>
+       - RUSTDESK_API_RUSTDESK_RELAY_SERVER=<relay_server[:31117]>
+       - RUSTDESK_API_RUSTDESK_API_SERVER=http://<api_server[:31114]>
        - RUSTDESK_API_KEY_FILE=/data/id_ed25519.pub
        - RUSTDESK_API_JWT_KEY=xxxxxx # jwt key
      volumes:
@@ -74,7 +74,7 @@
 
 [**下載**](https://github.com/rustdesk/rustdesk-server/releases)
 
-[**說明文件**](https://rustdesk.com/docs/zh-tw/self-host/)
+[**說明文件**](https://clouddesktop.com/docs/zh-tw/self-host/)
 
 [**FAQ**](https://github.com/rustdesk/rustdesk/wiki/FAQ)
 
@@ -94,7 +94,7 @@ cargo build --release
 
 您可以在 [releases](https://github.com/rustdesk/rustdesk-server/releases) 頁面上找到更新的執行檔。
 
-如果您需要額外功能，[RustDesk 專業版伺服器](https://rustdesk.com/pricing.html) 或許更適合您。
+如果您需要額外功能，[RustDesk 專業版伺服器](https://clouddesktop.com/pricing.html) 或許更適合您。
 
 如果您想開發自己的伺服器，[rustdesk-server-demo](https://github.com/rustdesk/rustdesk-server-demo) 可能是一個比這個倉庫更好、更簡單的開始。
 
@@ -123,11 +123,11 @@ docker run --name hbbr --net=host -v "$PWD/data:/root" -d rustdesk/rustdesk-serv
 對於使用 SELinux 的系統，需要將 ``/root`` 替換為 ``/root:z``，以便容器正確運行。或者，也可以通過添加選項 ``--security-opt label=disable`` 完全禁用 SELinux 容器隔離。
 
 ```bash
-docker run --name hbbs -p 21115:21115 -p 21116:21116 -p 21116:21116/udp -p 21118:21118 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
-docker run --name hbbr -p 21117:21117 -p 21119:21119 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
+docker run --name hbbs -p 31115:31115 -p 31116:31116 -p 31116:31116/udp -p 31118:31118 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbs -r <relay-server-ip[:port]> 
+docker run --name hbbr -p 31117:31117 -p 31119:31119 -v "$PWD/data:/root" -d rustdesk/rustdesk-server:latest hbbr 
 ```
 
-`relay-server-ip` 參數是執行這些容器的伺服器的 IP 地址（或 DNS 名稱）。如果您為 `hbbr` 使用的端口不是 **21117**，則必須使用 **可選** 的 `port` 參數。
+`relay-server-ip` 參數是執行這些容器的伺服器的 IP 地址（或 DNS 名稱）。如果您為 `hbbr` 使用的端口不是 **31117**，則必須使用 **可選** 的 `port` 參數。
 
 您也可以使用 docker-compose 使用這個設定做為範例：
 
@@ -142,12 +142,12 @@ services:
   hbbs:
     container_name: hbbs
     ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21118:21118
+      - 31115:31115
+      - 31116:31116
+      - 31116:31116/udp
+      - 31118:31118
     image: rustdesk/rustdesk-server:latest
-    command: hbbs -r rustdesk.example.com:21117
+    command: hbbs -r rustdesk.example.com:31117
     volumes:
       - ./data:/root
     networks:
@@ -159,8 +159,8 @@ services:
   hbbr:
     container_name: hbbr
     ports:
-      - 21117:21117
-      - 21119:21119
+      - 31117:31117
+      - 31119:31119
     image: rustdesk/rustdesk-server:latest
     command: hbbr
     volumes:
@@ -170,7 +170,7 @@ services:
     restart: unless-stopped
 ```
 
-請編輯第 16 行，將其指向您的中繼伺服器 （監聽端口 21117 那一個）。 如果需要的話，您也可以編輯 volume  (第 18 和 33 行)。
+請編輯第 16 行，將其指向您的中繼伺服器 （監聽端口 31117 那一個）。 如果需要的話，您也可以編輯 volume  (第 18 和 33 行)。
 
 （感謝 @lukebarone 和 @QuiGonLeong 協助提供 docker-compose 的設定範例）
 
@@ -215,8 +215,8 @@ docker run --name rustdesk-server \
 
 ```bash
 docker run --name rustdesk-server \
-  -p 21115:21115 -p 21116:21116 -p 21116:21116/udp \
-  -p 21117:21117 -p 21118:21118 -p 21119:21119 \
+  -p 31115:31115 -p 31116:31116 -p 31116:31116/udp \
+  -p 31117:31117 -p 31118:31118 -p 31119:31119 \
   -e "RELAY=rustdeskrelay.example.com" \
   -e "ENCRYPTED_ONLY=1" \
   -v "$PWD/data:/data" -d rustdesk/rustdesk-server-s6:latest
@@ -231,15 +231,15 @@ services:
   rustdesk-server:
     container_name: rustdesk-server
     ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21117:21117
-      - 21118:21118
-      - 21119:21119
+      - 31115:31115
+      - 31116:31116
+      - 31116:31116/udp
+      - 31117:31117
+      - 31118:31118
+      - 31119:31119
     image: rustdesk/rustdesk-server-s6:latest
     environment:
-      - "RELAY=rustdesk.example.com:21117"
+      - "RELAY=rustdesk.example.com:31117"
       - "ENCRYPTED_ONLY=1"
     volumes:
       - ./data:/data
@@ -285,15 +285,15 @@ services:
   rustdesk-server:
     container_name: rustdesk-server
     ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21117:21117
-      - 21118:21118
-      - 21119:21119
+      - 31115:31115
+      - 31116:31116
+      - 31116:31116/udp
+      - 31117:31117
+      - 31118:31118
+      - 31119:31119
     image: rustdesk/rustdesk-server-s6:latest
     environment:
-      - "RELAY=rustdesk.example.com:21117"
+      - "RELAY=rustdesk.example.com:31117"
       - "ENCRYPTED_ONLY=1"
       - "DB_URL=/db/db_v2.sqlite3"
       - "KEY_PRIV=FR2j78IxfwJNR+HjLluQ2Nh7eEryEeIZCwiQDPVe+PaITKyShphHAsPLn7So0OqRs92nGvSRdFJnE2MSyrKTIQ=="
@@ -329,15 +329,15 @@ services:
   rustdesk-server:
     container_name: rustdesk-server
     ports:
-      - 21115:21115
-      - 21116:21116
-      - 21116:21116/udp
-      - 21117:21117
-      - 21118:21118
-      - 21119:21119
+      - 31115:31115
+      - 31116:31116
+      - 31116:31116/udp
+      - 31117:31117
+      - 31118:31118
+      - 31119:31119
     image: rustdesk/rustdesk-server-s6:latest
     environment:
-      - "RELAY=rustdesk.example.com:21117"
+      - "RELAY=rustdesk.example.com:31117"
       - "ENCRYPTED_ONLY=1"
       - "DB_URL=/db/db_v2.sqlite3"
     volumes:
@@ -401,7 +401,7 @@ Secret Key:  egAVd44u33ZEUIDTtksGcHeVeAwywarEdHmf99KM5ajwEsuG3NQFT9coAfiZ6nen4hf
 | DOWNGRADE_THRESHOLD   | hbbr      | 降級檢查的閾值（bit/ms）                                  |
 | KEY                   | hbbs/hbbr | 如果設置了，將強制使用特定金鑰，如果設為 **"_"**，則強制使用任何金鑰           |
 | LIMIT_SPEED           | hbbr      | 速度限制（以Mb/s為單位）                                   |
-| PORT                  | hbbs/hbbr | 監聽端口（hbbs為21116，hbbr為21117）                      |
+| PORT                  | hbbs/hbbr | 監聽端口（hbbs為31116，hbbr為31117）                      |
 | RELAY_SERVERS         | hbbs      | 運行hbbr的機器的IP地址/DNS名稱（用逗號分隔）                      |
 | RUST_LOG              | all       | 設定 debug level (error\|warn\|info\|debug\|trace) |
 | SINGLE_BANDWIDTH      | hbbr      | 單個連接的最大頻寬（以Mb/s為單位）                              |
